@@ -1,0 +1,382 @@
+{
+  "name": "Type Bot",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "Webhook_Test",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "fd13d1a4-f78e-4977-9028-5c4a805b54be",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1.1,
+      "position": [
+        740,
+        120
+      ],
+      "webhookId": "db0ada7b-489c-4dd0-afd4-b20394613925",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "Webhook_Test",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "b01bf2f1-559f-458c-974c-4e2f71a4e2a3",
+      "name": "Webhook1",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1.1,
+      "position": [
+        720,
+        660
+      ],
+      "webhookId": "db0ada7b-489c-4dd0-afd4-b20394613925"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combinationMode": "multiplex",
+        "options": {}
+      },
+      "id": "031bbe4c-8b11-4dfe-b280-8131518bddf6",
+      "name": "Merge",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 2.1,
+      "position": [
+        1000,
+        280
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "266890fd-5fe9-44bc-90c7-b174c5d6df61",
+              "leftValue": "={{ $json.response.exercises }}",
+              "rightValue": "",
+              "operator": {
+                "type": "array",
+                "operation": "empty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "2d8f8bc9-b123-4391-8fc1-03f51a2a8571",
+      "name": "If",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        1480,
+        420
+      ]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "Webhook_Test",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "bf9fc901-f111-478a-8c15-249a31a86275",
+      "name": "Webhook2",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1.1,
+      "position": [
+        860,
+        880
+      ],
+      "webhookId": "db0ada7b-489c-4dd0-afd4-b20394613925",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "bucketName": "gizelia.ia",
+        "fileKey": "lunge_8.mp4"
+      },
+      "id": "b24b9cb9-34c0-4ae7-9482-d83131972a11",
+      "name": "AWS S31",
+      "type": "n8n-nodes-base.awsS3",
+      "typeVersion": 2,
+      "position": [
+        1120,
+        880
+      ],
+      "credentials": {
+        "aws": {
+          "id": "kQNGkTwoicsK6cuT",
+          "name": "AWS account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "send",
+        "phoneNumberId": "289398000923398",
+        "recipientPhoneNumber": "=+{{ $('Webhook2').item.json.body.entry[0].changes[0].value.contacts[0].wa_id }}",
+        "messageType": "video",
+        "mediaPath": "useMedian8n",
+        "additionalFields": {}
+      },
+      "id": "14caae26-f019-4381-a05f-0ab886ba5731",
+      "name": "WhatsApp Business Cloud4",
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1,
+      "position": [
+        1400,
+        880
+      ],
+      "credentials": {
+        "whatsAppApi": {
+          "id": "ewhIAhak7RKEPIxE",
+          "name": "WhatsApp account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "bucketName": "gizelia.ia",
+        "fileKey": "={{$json}}"
+      },
+      "id": "96875fbc-8495-429c-8687-aa8b8d919365",
+      "name": "AWS S3",
+      "type": "n8n-nodes-base.awsS3",
+      "typeVersion": 2,
+      "position": [
+        2040,
+        440
+      ],
+      "credentials": {
+        "aws": {
+          "id": "kQNGkTwoicsK6cuT",
+          "name": "AWS account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://b0b8b353-9218-4d32-8506-d8b85c2be15d-00-ng43ghfy6jcc.pike.replit.dev/fetchVideos",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "excercises",
+              "value": "={{ $json.response.exercises }}"
+            },
+            {
+              "name": "auth",
+              "value": "MagridHardcodePassword"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "6aa132ed-e4b9-4019-81b8-17dc9588c7c4",
+      "name": "HTTP Request1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        1780,
+        440
+      ],
+      "notesInFlow": true,
+      "alwaysOutputData": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "operation": "send",
+        "phoneNumberId": "289398000923398",
+        "recipientPhoneNumber": "=+{{ $('Webhook1').item.json.body.entry[0].changes[0].value.contacts[0].wa_id }}",
+        "messageType": "video",
+        "mediaPath": "useMedian8n",
+        "additionalFields": {}
+      },
+      "id": "781e1786-ed6c-4ed1-bbc5-21b00fc91600",
+      "name": "WhatsApp Business Cloud3",
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1,
+      "position": [
+        2340,
+        440
+      ],
+      "credentials": {
+        "whatsAppApi": {
+          "id": "ewhIAhak7RKEPIxE",
+          "name": "WhatsApp account 2"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "operation": "send",
+        "phoneNumberId": "289398000923398",
+        "recipientPhoneNumber": "=+{{ $json.body.entry[0].changes[0].value.contacts[0].wa_id }}",
+        "textBody": "={{ $json.response.response }}",
+        "additionalFields": {}
+      },
+      "id": "9f063115-0f23-47e6-80a1-3c46b95800cb",
+      "name": "WhatsApp Business Cloud",
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1,
+      "position": [
+        1200,
+        280
+      ],
+      "credentials": {
+        "whatsAppApi": {
+          "id": "ewhIAhak7RKEPIxE",
+          "name": "WhatsApp account 2"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://b0b8b353-9218-4d32-8506-d8b85c2be15d-00-ng43ghfy6jcc.pike.replit.dev/ai",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"prompt\": \"{{ $json.body.entry[0].changes[0].value.messages[0].text.body }}\", \"id\":\"{{ $json.body.entry[0].changes[0].value.contacts[0].wa_id }}\", \"auth\": \"MagridHardcodePassword\"} ",
+        "options": {}
+      },
+      "id": "501a71db-bdcc-4fbe-a6d7-15cae77c4367",
+      "name": "HTTP Request",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        700,
+        420
+      ],
+      "onError": "continueRegularOutput"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "WhatsApp Business Cloud",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [],
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AWS S31": {
+      "main": [
+        [
+          {
+            "node": "WhatsApp Business Cloud4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook2": {
+      "main": [
+        [
+          {
+            "node": "AWS S31",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AWS S3": {
+      "main": [
+        [
+          {
+            "node": "WhatsApp Business Cloud3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request1": {
+      "main": [
+        [
+          {
+            "node": "AWS S3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "f687314b-b73e-4398-8245-2e4b5a1d7eb0",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "ef8902ad8212bd3e8fff53e4138d477aeab00f060ac477ae32fb9c496d5f80a8"
+  },
+  "id": "Z7EXp8zQXE6Kbsvl",
+  "tags": []
+}
